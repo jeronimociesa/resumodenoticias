@@ -1,0 +1,49 @@
+/* Estiliza o container com um grid de 4 colunas em telas grandes */
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;           /* espaçamento entre os cards */
+  padding: 16px;
+  background-color: #f9f9f9; /* cor de fundo do container */
+}
+
+.news-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* leve sombra */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Link ocupa o topo do card */
+.news-item a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* A imagem fica responsiva */
+.news-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Título e resumo com espaçamento */
+.news-item h3 {
+  margin: 0.5em;
+}
+
+.news-item p {
+  margin: 0.5em;
+  flex-grow: 1; /* empurra o card para expandir caso texto seja longo */
+}
+
+/* Responsividade: em telas menores, mostra 1 coluna (ou 2, conforme desejar) */
+@media (max-width: 768px) {
+  .news-container {
+    grid-template-columns: 1fr;
+  }
+}
