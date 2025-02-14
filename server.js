@@ -1,3 +1,5 @@
+// server.js
+
 const express = require('express');
 const Parser = require('rss-parser');
 const cors = require('cors');
@@ -12,16 +14,7 @@ const FEED_URLS = [
   'http://explosaomanauara.com.br/feed'
 ];
 
-let cacheNews = [];
-let lastFetchTime = 0;
-
 app.get('/api/feeds', async (req, res) => {
-  const now = Date.now();
-  // se passou menos de 5 minutos desde o último fetch, retorna o cache
-  if (now - lastFetchTime < 5 * 60 * 1000 && cacheNews.length) {
-    return res.json(cacheNews);
-  }
-
   try {
     let allNews = [];
 
@@ -64,10 +57,6 @@ app.get('/api/feeds', async (req, res) => {
       });
     }
 
-    // Atualiza o cache e o tempo do último fetch
-    cacheNews = allNews;
-    lastFetchTime = now;
-
     // Envia a lista de notícias em formato JSON
     res.json(allNews);
 
@@ -75,6 +64,24 @@ app.get('/api/feeds', async (req, res) => {
     console.error('Erro ao buscar feeds:', error);
     res.status(500).json({ error: 'Erro ao buscar feeds' });
   }
+});
+// evita parse toda hora
+let cacheNews = [];
+let lastFetchTime = 0;
+
+app.get('/api/feeds', async (req, res) => {
+  const now = Date.now();
+  // se passou menos de 5 minutos desde o último fetch, retorna o cache
+  if (now - lastFetchTime < 5 * 60 * 1000 && cacheNews.length) {
+    return res.json(cacheNews);
+  }
+
+  // caso contrário, faz o fetch real
+  // ... parse feeds
+  // no final:
+  cacheNews = allNews;
+  lastFetchTime = now;
+  return res.json(allNews);
 });
 
 // Inicia o servidor na porta 5000
